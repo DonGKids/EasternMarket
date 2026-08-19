@@ -1,0 +1,59 @@
+server:
+  port: 7071
+spring:
+  application:
+    name: shop-user
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+      config:
+        import-check:
+          enabled: false
+  datasource:
+     driver-class-name: com.mysql.cj.jdbc.Driver
+
+     url: jdbc:mysql://localhost:3306/buka_shop
+     username: root
+     password: 125044
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      database: 0
+  mail:
+    host: smtp.qq.com
+    port: 465
+    username: 2720160070@qq.com
+    password: zyaxbevtzxurdgjf
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+          starttls:
+            enable: true
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 10MB
+
+# 头像上传配置
+app:
+  upload:
+    avatar-dir: D:/buka-shop-files/avatars
+    avatar-url: /avatars
+
+# 优惠券配置
+coupon:
+  # 新人券模板ID（注册成功后自动发放，需与 coupon_template 表的 id 对应）
+  new-user-template-id: 1
+
+# MyBatis-Plus 配置
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true

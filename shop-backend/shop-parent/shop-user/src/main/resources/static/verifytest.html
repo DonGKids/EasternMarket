@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>邮箱验证码发送</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 40px 36px;
+            width: 380px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 28px;
+            font-size: 22px;
+        }
+        .form-group { margin-bottom: 20px; }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #555;
+            font-size: 14px;
+        }
+        input[type="email"] {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        button {
+            width: 100%;
+            padding: 11px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        button:hover { opacity: 0.9; }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .msg {
+            margin-top: 14px;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            text-align: center;
+            display: none;
+        }
+
+        /* 弹窗遮罩 */
+        .mask {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal {
+            background: #fff;
+            border-radius: 10px;
+            padding: 28px 30px;
+            width: 320px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+        }
+        .modal h3 {
+            color: #333;
+            margin-bottom: 18px;
+            font-size: 17px;
+            text-align: center;
+        }
+        .modal .captcha-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+        .modal .captcha-row input {
+            flex: 1;
+            padding: 9px 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .modal .captcha-row input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        #captchaImg {
+            width: 120px;
+            height: 60px;
+            cursor: pointer;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: #f5f5f5;
+        }
+        .modal .tip {
+            font-size: 12px;
+            color: #999;
+            text-align: center;
+            margin-top: 4px;
+        }
+        .modal .modal-msg {
+            margin-top: 10px;
+            font-size: 13px;
+            text-align: center;
+            min-height: 18px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>邮箱验证码发送</h2>
+
+        <div class="form-group">
+            <label for="email">邮箱</label>
+            <input type="email" id="email" placeholder="请输入邮箱" autocomplete="off">
+        </div>
+
+        <button id="sendBtn">发送验证码</button>
+        <div id="msg" class="msg"></div>
+    </div>
+
+    <!-- 图形验证码弹窗 -->
+    <div id="mask" class="mask">
+        <div class="modal">
+            <h3>请输入图形验证码</h3>
+            <div class="captcha-row">
+                <label for="code"></label><input type="text" id="code" placeholder="图中字符" maxlength="4" autocomplete="off">
+                <img id="captchaImg" title="点击刷新" alt="验证码" src="">
+            </div>
+            <div class="tip">看不清？点击图片换一张 · 回车提交</div>
+            <div id="modalMsg" class="modal-msg"></div>
+        </div>
+    </div>
+
+    <script>
+        const emailInput = document.getElementById('email');
+        const sendBtn = document.getElementById('sendBtn');
+        const msgEl = document.getElementById('msg');
+
+        const mask = document.getElementById('mask');
+        const codeInput = document.getElementById('code');
+        const captchaImg = document.getElementById('captchaImg');
+        const modalMsg = document.getElementById('modalMsg');
+
+        // 生成图形验证码图片 URL（带邮箱 + 时间戳防缓存）
+        function buildCaptchaUrl() {
+            const mail = emailInput.value.trim();
+            const t = Date.now();
+            return `/shop/user/verify?mail=${encodeURIComponent(mail)}&t=${t}`;
+        }
+
+        // 刷新图形验证码图片
+        function refreshCaptcha() {
+            captchaImg.src = buildCaptchaUrl();
+            codeInput.value = '';
+            modalMsg.textContent = '';
+            modalMsg.className = 'modal-msg';
+        }
+
+        // 打开弹窗
+        function openModal() {
+            mask.classList.add('show');
+            refreshCaptcha();
+            setTimeout(() => codeInput.focus(), 50);
+        }
+
+        // 关闭弹窗
+        function closeModal() {
+            mask.classList.remove('show');
+        }
+
+        // 主页面提示
+        function showMsg(text, type) {
+            msgEl.textContent = text;
+            msgEl.className = 'msg ' + type;
+        }
+
+        // 弹窗内提示
+        function showModalMsg(text, type) {
+            modalMsg.textContent = text;
+            modalMsg.className = 'modal-msg ' + type;
+        }
+
+        // 点击"发送验证码"按钮：先校验邮箱，再弹图形验证码
+        sendBtn.addEventListener('click', function () {
+            const mail = emailInput.value.trim();
+            if (!mail) {
+                showMsg('请先输入邮箱', 'error');
+                return;
+            }
+            showMsg('', '');
+            openModal();
+        });
+
+        // 点击图片刷新
+        captchaImg.addEventListener('click', refreshCaptcha);
+
+        // 点击遮罩外部关闭弹窗
+        mask.addEventListener('click', function (e) {
+            if (e.target === mask) closeModal();
+        });
+
+        // 弹窗输入框：回车提交
+        codeInput.addEventListener('keydown', function (e) {
+            if (e.keyCode === 13) {
+                sendMail();
+            }
+        });
+
+        // 发送邮件请求
+        function sendMail() {
+            const mail = emailInput.value.trim();
+            const code = codeInput.value.trim();
+
+            if (!code) {
+                showModalMsg('请输入图形验证码', 'err');
+                return;
+            }
+
+            showModalMsg('发送中...', '');
+
+            const xhr = new XMLHttpRequest();
+            const url = `/shop/user/sendMail?mail=${encodeURIComponent(mail)}&code=${encodeURIComponent(code)}`;
+            xhr.open('get', url);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        let data;
+                        try {
+                            data = JSON.parse(xhr.responseText);
+                        } catch (e) {
+                            data = { success: false, msg: '响应解析失败' };
+                        }
+                        if (data.success) {
+                            showModalMsg(data.msg || '邮件已发送', 'ok');
+                            // 短暂提示后关闭弹窗
+                            setTimeout(closeModal, 1500);
+                            showMsg('邮件验证码已发送，请查收', 'success');
+                        } else {
+                            showModalMsg(data.msg || '发送失败', 'err');
+                            // 校验失败/过期 → 刷新图形验证码
+                            refreshCaptcha();
+                        }
+                    } else {
+                        showModalMsg('请求失败：' + xhr.status, 'err');
+                        refreshCaptcha();
+                    }
+                }
+            };
+            xhr.send();
+        }
+    </script>
+</body>
+</html>

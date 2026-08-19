@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: shop-gateway
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: shop-user
+              uri: lb://shop-user
+              predicates:
+                - Path=/shop/user/**
+              filters:
+                - StripPrefix=1
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+      config:
+        import-check:
+          enabled: false
+  main:
+    web-application-type: reactive
+server:
+  port: 7070

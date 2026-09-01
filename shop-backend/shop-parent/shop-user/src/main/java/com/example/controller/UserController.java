@@ -4,20 +4,19 @@ import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.CircleCaptcha;
 import com.example.common.constant.RedisKeyConstants;
 import com.example.common.result.Result;
+import com.example.common.storage.StorageService;
 import com.example.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.UUID;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @RestController
@@ -30,13 +29,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // 头像上传目录（从配置读取，默认 D:/buka-shop-files/avatars）
-    @Value("${app.upload.avatar-dir:D:/buka-shop-files/avatars}")
-    private String avatarDir;
+    @Autowired
+    private StorageService storageService;
 
-    // 头像访问路径前缀
-    @Value("${app.upload.avatar-url:/avatars}")
-    private String avatarUrlPrefix;
+    /** 允许上传的头像图片扩展名（小写，不含点） */
+    private static final Set<String> ALLOW_AVATAR_EXT = Set.of("jpg", "jpeg", "png", "gif", "webp");
 
     @RequestMapping("/test")
     public String hello() {
@@ -116,7 +113,7 @@ public class UserController {
 
     /**
      * 上传头像
-     * 前端用 multipart/form-data 上传，返回可访问的 URL
+     * 前端用 multipart/form-data 上传，文件存到七牛云，返回可直接访问的 URL
      */
     @RequestMapping("/uploadAvatar")
     public Result<Void> uploadAvatar(@RequestParam("file") MultipartFile file) {
@@ -129,31 +126,22 @@ public class UserController {
             return Result.fail("文件名无效");
         }
 
-        // 取扩展名
+        // 取扩展名并校验类型，防止上传非图片或可执行文件
         String ext = "";
         int dot = originalName.lastIndexOf('.');
-        if (dot >= 0) {
-            ext = originalName.substring(dot);
+        if (dot >= 0 && dot < originalName.length() - 1) {
+            ext = originalName.substring(dot + 1).toLowerCase();
+        }
+        if (ext.isEmpty() || !ALLOW_AVATAR_EXT.contains(ext)) {
+            return Result.fail("仅支持 jpg/jpeg/png/gif/webp 格式");
         }
 
-        // 新文件名：uuid + 扩展名
-        String newFileName = UUID.randomUUID().toString().replace("-", "") + ext;
-
-        File dir = new File(avatarDir);
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-
-        File dest = new File(dir, newFileName);
         try {
-            file.transferTo(dest);
-        } catch (IOException e) {
+            String url = storageService.upload(file.getBytes(), ext, "avatar/");
+            return Result.<Void>ok("上传成功").with("url", url);
+        } catch (Exception e) {
             return Result.fail("上传失败：" + e.getMessage());
         }
-
-        // 返回可访问的 URL（由 WebConfig 把 /avatars/** 映射到本地目录）
-        String url = avatarUrlPrefix + "/" + newFileName;
-        return Result.<Void>ok("上传成功").with("url", url);
     }
 
     /**

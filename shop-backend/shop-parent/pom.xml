@@ -17,6 +17,7 @@
         <module>shop-coupon</module>
         <module>shop-order</module>
         <module>shop-product</module>
+        <module>shop-cart</module>
     </modules>
 
     <properties>

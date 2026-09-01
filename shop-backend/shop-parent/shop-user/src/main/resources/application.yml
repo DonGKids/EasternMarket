@@ -39,8 +39,8 @@ spring:
             enable: true
   servlet:
     multipart:
-      max-file-size: 5MB
-      max-request-size: 10MB
+      max-file-size: 30MB
+      max-request-size: 50MB
 
 # 头像上传配置
 app:
@@ -52,6 +52,18 @@ app:
 coupon:
   # 新人券模板ID（注册成功后自动发放，需与 coupon_template 表的 id 对应）
   new-user-template-id: 1
+
+# 七牛云对象存储配置
+# 凭证请勿硬编码：通过环境变量 QINIU_AK / QINIU_SK 注入
+# 获取方式：七牛云控制台 -> 密钥管理（AK/SK） + 对象存储 -> 新建空间（bucket） + 绑定域名（domain）
+qiniu:
+  access-key: ${QINIU_AK:4cX5rKk0ExL-wm21w_GOgy9MdudG-r8AAPck4iwb}
+  secret-key: ${QINIU_SK:536K3g6tx3gxOT0nM-hMGuo2HJTI7SZ1NG9PC255}
+  bucket: ${QINIU_BUCKET:bukashop11}
+  # 访问域名，如 https://cdn.example.com，末尾不带斜杠
+  domain: ${QINIU_DOMAIN:http://tk1vwjpkf.hn-bkt.clouddn.com}
+  # 存储区域：auto=自动 / region0=华东 / region1=华北 / region2=华南
+  region: region2
 
 # MyBatis-Plus 配置
 mybatis-plus:

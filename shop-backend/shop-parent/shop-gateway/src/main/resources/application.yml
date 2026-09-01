@@ -12,6 +12,18 @@ spring:
                 - Path=/shop/user/**
               filters:
                 - StripPrefix=1
+            - id: shop-order
+              uri: lb://shop-order
+              predicates:
+                - Path=/shop/order/**
+              filters:
+                - StripPrefix=1
+            - id: shop-cart
+              uri: lb://shop-cart
+              predicates:
+                - Path=/shop/cart/**
+              filters:
+                - StripPrefix=1
     nacos:
       discovery:
         server-addr: localhost:8848

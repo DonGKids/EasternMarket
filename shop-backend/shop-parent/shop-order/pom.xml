@@ -17,4 +17,25 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencies>
+        <!-- 引入 shop-entity 模块中的实体类 -->
+        <dependency>
+            <groupId>com.buka</groupId>
+            <artifactId>shop-entity</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 引入 shop-common 模块（统一返回结果 Result、常量等） -->
+        <dependency>
+            <groupId>com.buka</groupId>
+            <artifactId>shop-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 支付宝 SDK（电脑网站支付 alipay.trade.page.pay） -->
+        <dependency>
+            <groupId>com.alipay.sdk</groupId>
+            <artifactId>alipay-sdk-java</artifactId>
+            <version>4.40.272.ALL</version>
+        </dependency>
+    </dependencies>
+
 </project>

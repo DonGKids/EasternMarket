@@ -1,0 +1,107 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ========== 青瓷（默认主题） ========== */
+:root,
+[data-theme="celadon"] {
+  --color-primary: #1e3a8a;
+  --color-secondary: #3b5fc4;
+  --color-primary-gradient: linear-gradient(135deg, #1e3a8a 0%, #3b5fc4 100%);
+  --color-soft: #eef3fc;
+  --color-surface: #dbe6f9;
+  --color-border: #cdd9ee;
+  --color-bg: #f7f9fd;
+  --color-bg-grad: linear-gradient(180deg, #ffffff 0%, #f0f4fa 100%);
+  --color-border-grad: linear-gradient(90deg, #1e3a8a 0%, #3b5fc4 50%, #1e3a8a 100%);
+  --shadow-primary: rgba(30, 58, 138, 0.08);
+  --shadow-primary-md: rgba(30, 58, 138, 0.25);
+  --shadow-secondary: rgba(59, 95, 196, 0.38);
+  --color-danger: #c62828;
+  --color-danger-bg: #fdecea;
+  --color-success: #2e7d32;
+  --color-success-bg: #e6f7e6;
+  --page-bg: url("http://tk1vwjpkf.hn-bkt.clouddn.com/avatar/bg-image.jpg");
+}
+
+/* ========== 竹叶 ========== */
+[data-theme="bamboo"] {
+  --color-primary: #2d6a4f;
+  --color-secondary: #52b788;
+  --color-primary-gradient: linear-gradient(135deg, #2d6a4f 0%, #52b788 100%);
+  --color-soft: #e8f5e9;
+  --color-surface: #c8e6c9;
+  --color-border: #a5d6a7;
+  --color-bg: #f5f9f5;
+  --color-bg-grad: linear-gradient(180deg, #ffffff 0%, #f0f7f0 100%);
+  --color-border-grad: linear-gradient(90deg, #2d6a4f 0%, #52b788 50%, #2d6a4f 100%);
+  --shadow-primary: rgba(45, 106, 79, 0.08);
+  --shadow-primary-md: rgba(45, 106, 79, 0.25);
+  --shadow-secondary: rgba(82, 183, 136, 0.38);
+  --color-danger: #c62828;
+  --color-danger-bg: #fdecea;
+  --color-success: #2e7d32;
+  --color-success-bg: #e6f7e6;
+  --page-bg: url("http://tk1vwjpkf.hn-bkt.clouddn.com/avatar/bg-bamboo.jpg");
+}
+
+/* ========== 桃夭 ========== */
+[data-theme="peach"] {
+  --color-primary: #c04060;
+  --color-secondary: #e88c9f;
+  --color-primary-gradient: linear-gradient(135deg, #c04060 0%, #e88c9f 100%);
+  --color-soft: #fdeef2;
+  --color-surface: #f8d7dc;
+  --color-border: #e8b4bd;
+  --color-bg: #fdf5f7;
+  --color-bg-grad: linear-gradient(180deg, #ffffff 0%, #faf0f3 100%);
+  --color-border-grad: linear-gradient(90deg, #c04060 0%, #e88c9f 50%, #c04060 100%);
+  --shadow-primary: rgba(192, 64, 96, 0.08);
+  --shadow-primary-md: rgba(192, 64, 96, 0.25);
+  --shadow-secondary: rgba(232, 140, 159, 0.38);
+  --color-danger: #c62828;
+  --color-danger-bg: #fdecea;
+  --color-success: #2e7d32;
+  --color-success-bg: #e6f7e6;
+  --page-bg: url("http://tk1vwjpkf.hn-bkt.clouddn.com/avatar/bg-peach.jpg");
+}
+
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  font-family: 'Noto Sans SC', 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--color-bg);
+  transition: background 0.3s ease;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ========== 页面级公共样式：供 Home / Market / Activity 等根容器复用 ========== */
+.page-shell {
+  min-height: 100vh;
+  background: var(--page-bg) center / cover no-repeat fixed;
+  font-family: 'Noto Sans SC', 'PingFang SC', 'Helvetica Neue', sans-serif;
+  position: relative;
+}
+
+.page-shell::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(2px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.page-shell > * {
+  position: relative;
+  z-index: 1;
+}

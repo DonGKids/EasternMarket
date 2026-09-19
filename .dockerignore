@@ -1,0 +1,25 @@
+# 前端依赖与构建产物（不参与后端镜像构建）
+shop-frontend/node_modules
+shop-frontend/dist
+
+# Maven 构建产物
+**/target
+
+# IDE 与版本控制
+.idea
+.vscode
+.git
+.gitignore
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# Docker 自身
+docker-compose*.yml
+Dockerfile
+.dockerignore
+
+# 临时文件
+*.log
+*.tmp

@@ -1,4 +1,4 @@
-server:
+﻿server:
   port: 7071
 spring:
   application:
@@ -6,26 +6,27 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: localhost:8848
+        server-addr: ${NACOS_ADDR:localhost:8848}
       config:
         import-check:
           enabled: false
   datasource:
      driver-class-name: com.mysql.cj.jdbc.Driver
 
-     url: jdbc:mysql://localhost:3306/buka_shop
+     url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/buka_shop
      username: root
-     password: 125044
+     password: ${MYSQL_PASSWORD:}
   data:
     redis:
-      host: localhost
+      host: ${REDIS_HOST:localhost}
       port: 6379
       database: 0
   mail:
     host: smtp.qq.com
     port: 465
-    username: 2720160070@qq.com
-    password: zyaxbevtzxurdgjf
+    # 从环境变量注入（见 .env）：QQ 邮箱地址 + 授权码
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
     default-encoding: UTF-8
     properties:
       mail:
@@ -45,7 +46,7 @@ spring:
 # 头像上传配置
 app:
   upload:
-    avatar-dir: D:/buka-shop-files/avatars
+    avatar-dir: ${AVATAR_DIR:D:/easternmarket-files/avatars}
     avatar-url: /avatars
 
 # 优惠券配置
@@ -54,11 +55,11 @@ coupon:
   new-user-template-id: 1
 
 # 七牛云对象存储配置
-# 凭证请勿硬编码：通过环境变量 QINIU_AK / QINIU_SK 注入
+# 凭证请勿硬编码：通过环境变量 QINIU_AK / QINIU_SK 注入（见 .env）
 # 获取方式：七牛云控制台 -> 密钥管理（AK/SK） + 对象存储 -> 新建空间（bucket） + 绑定域名（domain）
 qiniu:
-  access-key: ${QINIU_AK:4cX5rKk0ExL-wm21w_GOgy9MdudG-r8AAPck4iwb}
-  secret-key: ${QINIU_SK:536K3g6tx3gxOT0nM-hMGuo2HJTI7SZ1NG9PC255}
+  access-key: ${QINIU_AK:}
+  secret-key: ${QINIU_SK:}
   bucket: ${QINIU_BUCKET:bukashop11}
   # 访问域名，如 https://cdn.example.com，末尾不带斜杠
   domain: ${QINIU_DOMAIN:http://tk1vwjpkf.hn-bkt.clouddn.com}

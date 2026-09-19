@@ -1,0 +1,266 @@
+﻿# =============================================================================
+# Eastern Market 全栈 Docker 编排
+# 包含：MySQL / Redis / Nacos + 6 个后端微服务
+#
+# 启动全部：docker compose up -d --build
+# 仅启动中间件：docker compose up -d mysql redis nacos
+# 查看状态：docker compose ps
+# 查看日志：docker compose logs -f [服务名]
+# 停止：docker compose down
+# 重置数据库：docker compose down -v  然后重新 up
+#
+# 敏感配置（数据库密码、支付宝沙箱密钥等）统一放在项目根目录的 .env 文件，
+# Docker Compose 会自动加载并在 ${VAR} 处做变量替换。
+# 请勿将真实 .env 提交到版本库（.gitignore 已忽略），
+# 请使用 .env.example 作为模板：cp .env.example .env
+# =============================================================================
+
+# 通用环境变量模板（YAML 锚点，供各微服务复用）
+x-backend-env: &backend-env
+  MYSQL_HOST: mysql
+  REDIS_HOST: redis
+  NACOS_ADDR: nacos:8848
+  TZ: Asia/Shanghai
+  # 后端服务用 root 密码连接 MySQL，值从 .env 的 MYSQL_ROOT_PASSWORD 取
+  MYSQL_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+
+services:
+
+  # ---------------------------------------------------------------------------
+  # MySQL 8.0
+  # ---------------------------------------------------------------------------
+  mysql:
+    image: mysql:8.0
+    container_name: easternmarket-mysql
+    restart: unless-stopped
+    environment:
+      # 从 .env 读取；若未设置则启动时报错，避免空密码裸奔
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?请在 .env 中设置 MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-buka_shop}
+      TZ: Asia/Shanghai
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_general_ci
+      - --default-authentication-plugin=mysql_native_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      # 按数字前缀顺序执行初始化脚本（仅首次启动 / 数据卷为空时执行）
+      - ./shop-backend/sql/all.sql:/docker-entrypoint-initdb.d/01-all.sql:ro
+      - ./shop-backend/sql/seed-product.sql:/docker-entrypoint-initdb.d/02-seed-product.sql:ro
+      - ./shop-backend/sql/seed-activity.sql:/docker-entrypoint-initdb.d/03-seed-activity.sql:ro
+      - ./shop-backend/sql/update-product-images.sql:/docker-entrypoint-initdb.d/04-update-images.sql:ro
+    healthcheck:
+      # 注意：-p 与密码之间不能有空格
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  # ---------------------------------------------------------------------------
+  # Redis 7
+  # ---------------------------------------------------------------------------
+  redis:
+    image: redis:7-alpine
+    container_name: easternmarket-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # ---------------------------------------------------------------------------
+  # Nacos 2.x（standalone 单机模式，内嵌 Derby 存储）
+  # 控制台：http://localhost:8848/nacos   账号/密码：nacos / nacos
+  # ---------------------------------------------------------------------------
+  nacos:
+    image: nacos/nacos-server:v2.4.2
+    container_name: easternmarket-nacos
+    restart: unless-stopped
+    environment:
+      MODE: standalone
+      PREFER_HOST_MODE: hostname
+      NACOS_AUTH_ENABLE: "false"
+      TZ: Asia/Shanghai
+    ports:
+      - "8848:8848"   # HTTP API + 控制台
+      - "9848:9848"   # gRPC（客户端通信，Nacos 2.x 必需）
+      - "9849:9849"   # gRPC（服务端通信）
+    volumes:
+      - nacos_data:/home/nacos/data
+      - nacos_logs:/home/nacos/logs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8848/nacos/v1/console/health/readiness"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
+
+  # ===========================================================================
+  # 后端微服务（通过 Dockerfile 多阶段构建，SERVICE 参数指定服务名）
+  # ===========================================================================
+
+  # ---- shop-user：用户服务（7071）----
+  shop-user:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE: shop-user
+    container_name: easternmarket-shop-user
+    restart: unless-stopped
+    environment:
+      <<: *backend-env
+      AVATAR_DIR: /app/avatars
+      # QQ 邮箱（发送验证码）
+      MAIL_USERNAME: ${MAIL_USERNAME:-}
+      MAIL_PASSWORD: ${MAIL_PASSWORD:-}
+      # 七牛云对象存储
+      QINIU_AK: ${QINIU_AK:-}
+      QINIU_SK: ${QINIU_SK:-}
+      QINIU_BUCKET: ${QINIU_BUCKET:-bukashop11}
+      QINIU_DOMAIN: ${QINIU_DOMAIN:-http://tk1vwjpkf.hn-bkt.clouddn.com}
+    ports:
+      - "7071:7071"
+    volumes:
+      - avatars_data:/app/avatars
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      nacos:
+        condition: service_healthy
+
+  # ---- shop-product：商品服务（7073）----
+  shop-product:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE: shop-product
+    container_name: easternmarket-shop-product
+    restart: unless-stopped
+    environment:
+      <<: *backend-env
+    ports:
+      - "7073:7073"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      nacos:
+        condition: service_healthy
+
+  # ---- shop-coupon：优惠券服务（7072）----
+  shop-coupon:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE: shop-coupon
+    container_name: easternmarket-shop-coupon
+    restart: unless-stopped
+    environment:
+      <<: *backend-env
+    ports:
+      - "7072:7072"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      nacos:
+        condition: service_healthy
+
+  # ---- shop-cart：购物车服务（7075）----
+  shop-cart:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE: shop-cart
+    container_name: easternmarket-shop-cart
+    restart: unless-stopped
+    environment:
+      <<: *backend-env
+    ports:
+      - "7075:7075"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      nacos:
+        condition: service_healthy
+
+  # ---- shop-order：订单服务（7074）----
+  shop-order:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE: shop-order
+    container_name: easternmarket-shop-order
+    restart: unless-stopped
+    environment:
+      <<: *backend-env
+      # 支付宝沙箱配置从 .env 注入到容器，
+      # 需在 application.yml 中改为 ${ALIPAY_APP_ID} / ${ALIPAY_PRIVATE_KEY} 等引用
+      ALIPAY_APP_ID: ${ALIPAY_APP_ID:-}
+      ALIPAY_PRIVATE_KEY: ${ALIPAY_PRIVATE_KEY:-}
+      ALIPAY_PUBLIC_KEY: ${ALIPAY_PUBLIC_KEY:-}
+      ALIPAY_NOTIFY_URL: ${ALIPAY_NOTIFY_URL:-}
+      ALIPAY_RETURN_URL: ${ALIPAY_RETURN_URL:-http://localhost:1160/pay-result}
+    ports:
+      - "7074:7074"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      nacos:
+        condition: service_healthy
+
+  # ---- shop-gateway：网关（7070）最后启动，等待所有业务服务就绪 ----
+  shop-gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE: shop-gateway
+    container_name: easternmarket-shop-gateway
+    restart: unless-stopped
+    environment:
+      <<: *backend-env
+    ports:
+      - "7070:7070"
+    depends_on:
+      nacos:
+        condition: service_healthy
+      shop-user:
+        condition: service_started
+      shop-product:
+        condition: service_started
+      shop-coupon:
+        condition: service_started
+      shop-cart:
+        condition: service_started
+      shop-order:
+        condition: service_started
+
+volumes:
+  mysql_data:
+  redis_data:
+  nacos_data:
+  nacos_logs:
+  avatars_data:

@@ -1,4 +1,4 @@
-﻿# =============================================================================
+# =============================================================================
 # Eastern Market 全栈 Docker 编排
 # 包含：MySQL / Redis / Nacos + 6 个后端微服务
 #
@@ -36,7 +36,7 @@ services:
     environment:
       # 从 .env 读取；若未设置则启动时报错，避免空密码裸奔
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?请在 .env 中设置 MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-buka_shop}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-eastern_market}
       TZ: Asia/Shanghai
     command:
       - --character-set-server=utf8mb4

@@ -1,11 +1,11 @@
 -- ======================================================================
 -- 活动表 + 优惠券模板 测试数据
--- 数据库：buka_shop
+-- 数据库：eastern_market
 -- 执行方式：mysql -uroot -p125044 < seed-activity.sql
 -- 重复执行安全（全部使用 WHERE NOT EXISTS）
 -- ======================================================================
 
-USE `buka_shop`;
+USE `eastern_market`;
 
 -- 先清理旧数据（可选，如需重置请取消注释）
 -- DELETE FROM `template_coupon` WHERE `activity_id` IS NOT NULL;

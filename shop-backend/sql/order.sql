@@ -1,11 +1,11 @@
 -- ======================================================================
 -- shop-order 微服务建表脚本（订单主表 + 订单明细）
--- 数据库：buka_shop
+-- 数据库：eastern_market
 -- 执行方式：mysql -uroot -p125044 < order.sql
 -- ======================================================================
 
-CREATE DATABASE IF NOT EXISTS `buka_shop` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `buka_shop`;
+CREATE DATABASE IF NOT EXISTS `eastern_market` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `eastern_market`;
 
 -- 订单主表
 CREATE TABLE IF NOT EXISTS `orders` (

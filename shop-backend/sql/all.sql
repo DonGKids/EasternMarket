@@ -1,5 +1,5 @@
 -- ======================================================================
--- buka_shop 数据库一键建表脚本（合并版）
+-- eastern_market 数据库一键建表脚本（合并版）
 -- 汇总自 4 个微服务的分模块 SQL：
 --   user.sql / product.sql / coupon.sql / order.sql
 -- 共 8 张表 + 1 条种子数据（新人券模板 id=1）
@@ -8,8 +8,8 @@
 -- 重复执行安全（全部使用 IF NOT EXISTS / WHERE NOT EXISTS）
 -- ======================================================================
 
-CREATE DATABASE IF NOT EXISTS `buka_shop` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `buka_shop`;
+CREATE DATABASE IF NOT EXISTS `eastern_market` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `eastern_market`;
 
 -- ======================================================================
 -- 1. shop-user：用户表

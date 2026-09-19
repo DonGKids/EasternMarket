@@ -2,7 +2,7 @@
 -- shop-cart：购物车持久化表
 -- 按 user_id + product_id 唯一约束，避免同一商品重复入库
 -- ======================================================================
-USE `buka_shop`;
+USE `eastern_market`;
 
 CREATE TABLE IF NOT EXISTS `cart_item` (
   `id`          BIGINT       NOT NULL AUTO_INCREMENT,

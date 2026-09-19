@@ -1,11 +1,11 @@
 -- ======================================================================
 -- shop-coupon 微服务建表脚本（优惠券模板 / 用户券 / 活动中心）
--- 数据库：buka_shop
+-- 数据库：eastern_market
 -- 执行方式：mysql -uroot -p125044 < coupon.sql
 -- ======================================================================
 
-CREATE DATABASE IF NOT EXISTS `buka_shop` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `buka_shop`;
+CREATE DATABASE IF NOT EXISTS `eastern_market` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `eastern_market`;
 
 -- --------------------------------------------------------------------
 -- 优惠券模板表（规则定义，1 个模板可被多用户领取）

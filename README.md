@@ -1,4 +1,4 @@
-﻿# Eastern Market 电商微服务系统
+# Eastern Market 电商微服务系统
 
 ![Version](https://img.shields.io/badge/version-v1.0.0-blue)
 ![Java](https://img.shields.io/badge/Java-17-orange)
@@ -162,7 +162,7 @@ npm run dev
 
 ## 🗄️ 数据库表
 
-`buka_shop` 单库共 9 张表(由 `shop-backend/sql/all.sql` 自动初始化):
+`eastern_market` 单库共 9 张表(由 `shop-backend/sql/all.sql` 自动初始化):
 
 | 表名 | 说明 |
 |---|---|
@@ -225,7 +225,7 @@ copy .env.example .env       # Windows
 - [ ] **单元测试**:基本无测试覆盖,优先为 shop-order 支付回调和 shop-cart 核心逻辑补 JUnit 测试
 - [ ] **CI/CD**:加 GitHub Actions 做 `mvn package` + `npm run build` 构建校验,支持自动构建 Docker 镜像
 - [ ] **API 文档**:接入 springdoc-openapi 自动生成 Swagger,方便前端联调
-- [ ] **微服务边界**:当前 `buka_shop` 单库多服务共表,微服务边界不清晰,后续按业务拆分独立 schema
+- [ ] **微服务边界**:当前 `eastern_market` 单库多服务共表,微服务边界不清晰,后续按业务拆分独立 schema
 - [ ] **支付生产化**:支付宝 `notify-url` 目前依赖 natapp 免费内网穿透,会过期;上线需固定域名或切换生产配置
 - [ ] **日志与监控**:补全 Logback 配置、接入 SkyWalking / Prometheus 监控告警
 

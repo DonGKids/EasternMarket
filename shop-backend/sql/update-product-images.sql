@@ -2,7 +2,7 @@
 -- 更新商品图片为七牛云云端链接
 -- ======================================================================
 
-USE `buka_shop`;
+USE `eastern_market`;
 
 UPDATE product SET image_url = 'http://tk1vwjpkf.hn-bkt.clouddn.com/products/1.jpg' WHERE id = 1;
 UPDATE product SET image_url = 'http://tk1vwjpkf.hn-bkt.clouddn.com/products/2.jpg' WHERE id = 2;

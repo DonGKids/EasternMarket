@@ -163,11 +163,13 @@ function categoryLabel(category) {
 
 // 活动日期标签映射
 function getDateLabel(act) {
-  const name = act.name || ''
-  if (name.includes('乞巧')) return '8.16 - 8.22'
-  if (name.includes('会员日')) return '每月11号'
-  if (name.includes('新人首单')) return ''
-  return act.countdownText || ''
+  if (!act.endTime) {
+    const name = act.name || ''
+    if (name.includes('会员日')) return '每月11号'
+    return ''
+  }
+  const fmt = d => d ? d.slice(5, 10).replace('-', '.') : ''
+  return ` - `
 }
 
 // 解析活动规则（后端存的是 JSON 数组字符串）

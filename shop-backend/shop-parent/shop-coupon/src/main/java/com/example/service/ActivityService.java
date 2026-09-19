@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.time.LocalDateTime;
 
 /**
  * 活动 Service
@@ -33,6 +34,7 @@ public class ActivityService {
         List<Activity> list = activityMapper.selectList(
                 new QueryWrapper<Activity>()
                         .eq("status", 1)
+                        .and(w -> w.isNull("end_time").or().gt("end_time", LocalDateTime.now()))
                         .orderByAsc("sort"));
         return Result.ok("ok", list);
     }
@@ -68,6 +70,7 @@ public class ActivityService {
         List<Activity> activities = activityMapper.selectList(
                 new QueryWrapper<Activity>()
                         .eq("status", 1)
+                        .and(w -> w.isNull("end_time").or().gt("end_time", LocalDateTime.now()))
                         .orderByAsc("sort"));
 
         List<Map<String, Object>> result = activities.stream().map(a -> {

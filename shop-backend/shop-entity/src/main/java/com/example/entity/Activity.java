@@ -43,6 +43,12 @@ public class Activity {
     /** 排序（越小越靠前） */
     private Integer sort;
 
+    /** 活动开始时间（常驻活动为 NULL） */
+    private LocalDateTime startTime;
+
+    /** 活动结束时间（常驻活动为 NULL） */
+    private LocalDateTime endTime;
+
     private LocalDateTime createTime;
 
     private LocalDateTime updateTime;
@@ -73,6 +79,12 @@ public class Activity {
 
     public Integer getSort() { return sort; }
     public void setSort(Integer sort) { this.sort = sort; }
+
+    public LocalDateTime getStartTime() { return startTime; }
+    public void setStartTime(LocalDateTime startTime) { this.startTime = startTime; }
+
+    public LocalDateTime getEndTime() { return endTime; }
+    public void setEndTime(LocalDateTime endTime) { this.endTime = endTime; }
 
     public LocalDateTime getCreateTime() { return createTime; }
     public void setCreateTime(LocalDateTime createTime) { this.createTime = createTime; }

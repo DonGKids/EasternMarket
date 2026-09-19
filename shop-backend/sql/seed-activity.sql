@@ -1,3 +1,4 @@
+SET NAMES utf8mb4;
 -- ======================================================================
 -- 活动表 + 优惠券模板 测试数据
 -- 数据库：eastern_market
@@ -27,10 +28,10 @@ SELECT 2, '会员日特惠', 2, '每月 11 号会员日，全场限时抢券！�
        1, 2, NOW(), NOW()
 FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM `activity` WHERE `id` = 2);
 
-INSERT INTO `activity` (`id`, `name`, `category`, `description`, `countdown_text`, `urgent`, `rules`, `status`, `sort`, `create_time`, `update_time`)
+INSERT INTO `activity` (`id`, `name`, `category`, `description`, `countdown_text`, `urgent`, `rules`, `status`, `sort`, `start_time`, `end_time`, `create_time`, `update_time`)
 SELECT 3, '816 乞巧节·甜蜜季', 2, '乞巧节浪漫献礼，满 50 减 10、9 折券甜蜜上线，为心爱的她/他选购一份惊喜吧！', '2天 05:30:12', 1,
        '["活动时间：8 月 16 日 - 8 月 22 日","全场商品均可使用","每人每券限领 1 张","优惠券有效期至活动结束后 7 天"]',
-       1, 3, NOW(), NOW()
+       1, 3, '2026-08-16 00:00:00', '2026-08-23 23:59:59', NOW(), NOW()
 FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM `activity` WHERE `id` = 3);
 
 INSERT INTO `activity` (`id`, `name`, `category`, `description`, `countdown_text`, `urgent`, `rules`, `status`, `sort`, `create_time`, `update_time`)

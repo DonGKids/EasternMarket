@@ -82,7 +82,7 @@ public class UserService {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(from);
             message.setTo(mail);
-            message.setSubject("【buka-shop】注册验证码");
+            message.setSubject("【EasternMarket】注册验证码");
             message.setText("您的验证码是：" + mailCode + "，5 分钟内有效，请勿泄露。");
             mailSender.send(message);
         } catch (Exception e) {

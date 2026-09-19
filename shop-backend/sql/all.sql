@@ -1,3 +1,4 @@
+SET NAMES utf8mb4;
 -- ======================================================================
 -- eastern_market 数据库一键建表脚本（合并版）
 -- 汇总自 4 个微服务的分模块 SQL：
@@ -115,6 +116,8 @@ CREATE TABLE IF NOT EXISTS `activity` (
   `rules`          TEXT         DEFAULT NULL COMMENT '活动规则（JSON 数组字符串，如 ["规则1","规则2"]）',
   `status`         TINYINT      DEFAULT 1 COMMENT '状态：0 未开始，1 进行中，2 已结束',
   `sort`           INT          DEFAULT 0 COMMENT '排序（越小越靠前）',
+  `start_time`     DATETIME     DEFAULT NULL COMMENT '活动开始时间（常驻活动为 NULL）',
+  `end_time`       DATETIME     DEFAULT NULL COMMENT '活动结束时间（常驻活动为 NULL）',
   `create_time`    DATETIME     DEFAULT NULL COMMENT '创建时间',
   `update_time`    DATETIME     DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`),

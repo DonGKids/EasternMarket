@@ -48,6 +48,8 @@ CREATE TABLE IF NOT EXISTS `product` (
   `original_price` DECIMAL(10,2) DEFAULT NULL COMMENT '原价',
   `badge`         VARCHAR(20)   DEFAULT NULL COMMENT '角标文字（如热销、新品、8折）',
   `is_flash`      TINYINT       DEFAULT 0 COMMENT '是否限时商品：0 否，1 是',
+  `flash_start_time` DATETIME    DEFAULT NULL COMMENT '限时活动开始时间（非限时商品为 NULL）',
+  `flash_end_time`   DATETIME    DEFAULT NULL COMMENT '限时活动结束时间（非限时商品为 NULL）',
   `image_url`     VARCHAR(255)  DEFAULT NULL COMMENT '商品图片路径',
   `category_id`   BIGINT        DEFAULT NULL COMMENT '分类ID',
   `stock`         INT           DEFAULT 0 COMMENT '库存数量',

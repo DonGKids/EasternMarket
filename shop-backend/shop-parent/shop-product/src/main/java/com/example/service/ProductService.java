@@ -106,6 +106,7 @@ public class ProductService {
     public Result<List<Product>> listOnSale(Long categoryId, String keyword) {
         QueryWrapper<Product> wrapper = new QueryWrapper<Product>()
                 .eq("status", 1)
+                .and(w -> w.eq("is_flash", 0).or().isNull("flash_end_time").or().gt("flash_end_time", LocalDateTime.now()))
                 .orderByDesc("is_flash")
                 .orderByDesc("sales");
         if (categoryId != null) {
@@ -126,6 +127,7 @@ public class ProductService {
                 new QueryWrapper<Product>()
                         .eq("status", 1)
                         .eq("is_flash", 1)
+                        .and(w -> w.isNull("flash_end_time").or().gt("flash_end_time", LocalDateTime.now()))
                         .orderByDesc("sales"));
         return Result.ok("ok", list);
     }

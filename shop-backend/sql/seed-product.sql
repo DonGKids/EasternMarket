@@ -40,28 +40,28 @@ FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM `category` WHERE `id` = 5);
 -- ======================================================================
 
 -- 七夕限时商品
-INSERT INTO `product` (`id`, `name`, `description`, `price`, `original_price`, `badge`, `is_flash`, `image_url`, `category_id`, `stock`, `sales`, `status`, `create_time`, `update_time`)
-SELECT 1, '情侣对戒礼盒', '925银对戒，刻字定制，附赠首饰袋', 299.00, 499.00, '热销', 1, '/products/1.jpg', 1, 50, 0, 1, NOW(), NOW()
+INSERT INTO `product` (`id`, `name`, `description`, `price`, `original_price`, `badge`, `is_flash`, `flash_start_time`, `flash_end_time`, `image_url`, `category_id`, `stock`, `sales`, `status`, `create_time`, `update_time`)
+SELECT 1, '情侣对戒礼盒', '925银对戒，刻字定制，附赠首饰袋', 299.00, 499.00, '热销', 1, '2026-08-16 00:00:00', '2026-08-23 23:59:59', '/products/1.jpg', 1, 50, 0, 1, NOW(), NOW()
 FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM `product` WHERE `id` = 1);
 
-INSERT INTO `product` (`id`, `name`, `description`, `price`, `original_price`, `badge`, `is_flash`, `image_url`, `category_id`, `stock`, `sales`, `status`, `create_time`, `update_time`)
-SELECT 2, '永生花玫瑰礼盒', '进口厄瓜多尔玫瑰，可保存3年', 199.00, 329.00, '新品', 1, '/products/2.jpg', 4, 80, 0, 1, NOW(), NOW()
+INSERT INTO `product` (`id`, `name`, `description`, `price`, `original_price`, `badge`, `is_flash`, `flash_start_time`, `flash_end_time`, `image_url`, `category_id`, `stock`, `sales`, `status`, `create_time`, `update_time`)
+SELECT 2, '永生花玫瑰礼盒', '进口厄瓜多尔玫瑰，可保存3年', 199.00, 329.00, '新品', 1, '2026-08-16 00:00:00', '2026-08-23 23:59:59', '/products/2.jpg', 4, 80, 0, 1, NOW(), NOW()
 FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM `product` WHERE `id` = 2);
 
-INSERT INTO `product` (`id`, `name`, `description`, `price`, `original_price`, `badge`, `is_flash`, `image_url`, `category_id`, `stock`, `sales`, `status`, `create_time`, `update_time`)
-SELECT 3, '情侣睡衣套装', '纯棉情侣款，丝绒刺绣，两色可选', 159.00, 259.00, NULL, 1, '/products/3.jpg', 3, 30, 0, 1, NOW(), NOW()
+INSERT INTO `product` (`id`, `name`, `description`, `price`, `original_price`, `badge`, `is_flash`, `flash_start_time`, `flash_end_time`, `image_url`, `category_id`, `stock`, `sales`, `status`, `create_time`, `update_time`)
+SELECT 3, '情侣睡衣套装', '纯棉情侣款，丝绒刺绣，两色可选', 159.00, 259.00, NULL, 1, '2026-08-16 00:00:00', '2026-08-23 23:59:59', '/products/3.jpg', 3, 30, 0, 1, NOW(), NOW()
 FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM `product` WHERE `id` = 3);
 
-INSERT INTO `product` (`id`, `name`, `description`, `price`, `original_price`, `badge`, `is_flash`, `image_url`, `category_id`, `stock`, `sales`, `status`, `create_time`, `update_time`)
-SELECT 4, '情侣手链对装', '钛钢防敏，磁吸相扣，含礼盒', 128.00, 199.00, '特价', 1, '/products/4.jpg', 3, 100, 0, 1, NOW(), NOW()
+INSERT INTO `product` (`id`, `name`, `description`, `price`, `original_price`, `badge`, `is_flash`, `flash_start_time`, `flash_end_time`, `image_url`, `category_id`, `stock`, `sales`, `status`, `create_time`, `update_time`)
+SELECT 4, '情侣手链对装', '钛钢防敏，磁吸相扣，含礼盒', 128.00, 199.00, '特价', 1, '2026-08-16 00:00:00', '2026-08-23 23:59:59', '/products/4.jpg', 3, 100, 0, 1, NOW(), NOW()
 FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM `product` WHERE `id` = 4);
 
-INSERT INTO `product` (`id`, `name`, `description`, `price`, `original_price`, `badge`, `is_flash`, `image_url`, `category_id`, `stock`, `sales`, `status`, `create_time`, `update_time`)
-SELECT 5, '巧克力礼盒', '比利时进口，16颗手工松露', 139.00, 219.00, NULL, 1, '/products/5.jpg', 4, 120, 0, 1, NOW(), NOW()
+INSERT INTO `product` (`id`, `name`, `description`, `price`, `original_price`, `badge`, `is_flash`, `flash_start_time`, `flash_end_time`, `image_url`, `category_id`, `stock`, `sales`, `status`, `create_time`, `update_time`)
+SELECT 5, '巧克力礼盒', '比利时进口，16颗手工松露', 139.00, 219.00, NULL, 1, '2026-08-16 00:00:00', '2026-08-23 23:59:59', '/products/5.jpg', 4, 120, 0, 1, NOW(), NOW()
 FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM `product` WHERE `id` = 5);
 
-INSERT INTO `product` (`id`, `name`, `description`, `price`, `original_price`, `badge`, `is_flash`, `image_url`, `category_id`, `stock`, `sales`, `status`, `create_time`, `update_time`)
-SELECT 6, '情侣香氛蜡烛', '玫瑰+檀木对香，燃烧40小时', 99.00, 169.00, '新品', 1, '/products/6.jpg', 4, 60, 0, 1, NOW(), NOW()
+INSERT INTO `product` (`id`, `name`, `description`, `price`, `original_price`, `badge`, `is_flash`, `flash_start_time`, `flash_end_time`, `image_url`, `category_id`, `stock`, `sales`, `status`, `create_time`, `update_time`)
+SELECT 6, '情侣香氛蜡烛', '玫瑰+檀木对香，燃烧40小时', 99.00, 169.00, '新品', 1, '2026-08-16 00:00:00', '2026-08-23 23:59:59', '/products/6.jpg', 4, 60, 0, 1, NOW(), NOW()
 FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM `product` WHERE `id` = 6);
 
 -- 常规商品

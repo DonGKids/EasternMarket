@@ -34,6 +34,12 @@ public class Product {
     /** 是否限时商品：0 否，1 是 */
     private Integer isFlash;
 
+    /** 限时活动开始时间（非限时商品为 null） */
+    private LocalDateTime flashStartTime;
+
+    /** 限时活动结束时间（非限时商品为 null） */
+    private LocalDateTime flashEndTime;
+
     /** 商品图片路径（如 /products/1.jpg） */
     private String imageUrl;
 
@@ -73,6 +79,12 @@ public class Product {
 
     public Integer getIsFlash() { return isFlash; }
     public void setIsFlash(Integer isFlash) { this.isFlash = isFlash; }
+
+    public LocalDateTime getFlashStartTime() { return flashStartTime; }
+    public void setFlashStartTime(LocalDateTime flashStartTime) { this.flashStartTime = flashStartTime; }
+
+    public LocalDateTime getFlashEndTime() { return flashEndTime; }
+    public void setFlashEndTime(LocalDateTime flashEndTime) { this.flashEndTime = flashEndTime; }
 
     public String getImageUrl() { return imageUrl; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }

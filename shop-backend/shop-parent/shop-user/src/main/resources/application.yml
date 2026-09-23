@@ -60,9 +60,10 @@ coupon:
 qiniu:
   access-key: ${QINIU_AK:}
   secret-key: ${QINIU_SK:}
-  bucket: ${QINIU_BUCKET:bukashop11}
+  bucket: ${QINIU_BUCKET:easternmarket11}
   # 访问域名，如 https://cdn.example.com，末尾不带斜杠
-  domain: ${QINIU_DOMAIN:http://tk1vwjpkf.hn-bkt.clouddn.com}
+  domain: ${QINIU_DOMAIN:http://tlt63yb2h.hn-bkt.clouddn.com}
+
   # 存储区域：auto=自动 / region0=华东 / region1=华北 / region2=华南
   region: region2
 

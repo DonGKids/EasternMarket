@@ -387,7 +387,7 @@ function onSearch() {
 const productSections = computed(() => [
   { key: 'flash', title: '七夕限时 · 情侣好物', filtered: filteredFlashProducts.value },
   { key: 'normal', title: '常规商品', filtered: filteredNormalProducts.value }
-])
+].filter(s => s.filtered.length > 0))
 
 // ---------- 购物车（登录态持久化，后端 shop-cart 微服务） ----------
 const cart = ref([])
